@@ -11,9 +11,9 @@ function getClient()
     $client = new Client();
     $client->setApplicationName('Google Drive API PHP Quickstart');
     $client->setScopes(Google\Service\Drive::DRIVE_METADATA_READONLY);
-    $client->setAuthConfig('env.json');
+    $client->setAuthConfig('credentials.json');
     $client->setAccessType('offline');
-    $client->setRedirectUri('http://localhost:8080/callback.php');
+    $client->setRedirectUri('http://localhost:8888/callback.php');
 
     return $client;
 }

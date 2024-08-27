@@ -11,9 +11,9 @@ function getClient()
     $client = new Client();
     $client->setApplicationName('Google Drive API PHP Quickstart');
     $client->setScopes(Drive::DRIVE_METADATA_READONLY);
-    $client->setAuthConfig('env.json');
+    $client->setAuthConfig('credentials.json');
     $client->setAccessType('offline');
-    $client->setRedirectUri('http://localhost:8080/callback.php');
+    $client->setRedirectUri('http://localhost:8888/callback.php');
 
     if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         $client->setAccessToken($_SESSION['access_token']);
@@ -84,4 +84,4 @@ function listFilesInFolder($folderName)
 }
 
 // Call the function to list files in a specific folder
-listFilesInFolder('Adam\'s work');
+listFilesInFolder('BrickMMO');
