@@ -1,5 +1,6 @@
 .env
 .DS_Store
+credentials.json
 
 vendor/
 composer.lock
