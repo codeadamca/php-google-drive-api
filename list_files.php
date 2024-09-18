@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Drive Files</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="_https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /*
         .file-container {
             display: flex;
             flex-wrap: wrap;
@@ -27,6 +28,7 @@
         .card-body {
             text-align: center;
         }
+            */
     </style>
 </head>
 
@@ -49,7 +51,7 @@
                 $client->setScopes(Drive::DRIVE_METADATA_READONLY);
                 $client->setAuthConfig('env.json');
                 $client->setAccessType('offline');
-                $client->setRedirectUri('http://localhost:8080/callback.php');
+                $client->setRedirectUri('http://localhost:8888/callback.php');
 
                 if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                     $client->setAccessToken($_SESSION['access_token']);
@@ -97,6 +99,7 @@
 
                 // Generate the card layout
                 foreach ($results->getFiles() as $file) {
+                    
                     echo generateFileCard($file, $indentation);
 
                     // If the file is a folder, recurse into it
@@ -106,12 +109,30 @@
                 }
             }
 
-            function generateFileCard($file)
+            function generateFileCard($file, $indentation)
             {
+
+                global $service; 
+
                 $name = $file->getName();
+                $type = $file->getMimeType();
+
                 $createdTime = date('F j, Y', strtotime($file->getCreatedTime()));
                 $moreInfoLink = $file->getWebViewLink();
 
+                if($type === 'application/vnd.google-apps.folder') 
+                {
+                    $rootFolderId = getFolderIdByName($service, $name);
+                    return str_repeat('-', $indentation).' <b>'.$name.' '.$rootFolderId.'</b><br>';
+                }
+                else
+                {
+                    return str_repeat('-', $indentation).' '.$name.'<br>';
+                }
+                
+                
+
+                /*
                 return "
     <div class='card'>
         <div class='card-body'>
@@ -120,13 +141,15 @@
             <a href='$moreInfoLink' target='_blank' class='btn btn-primary'>More Info</a>
         </div>
     </div>
-    ";
+    ";*/
             }
 
             // Entry point: List all files starting from the root folder
             $client = getClient();
             $service = new Drive($client);
-            $rootFolderId = getFolderIdByName($service, 'IB question bank');
+
+            // $rootFolderId = getFolderIdByName($service, 'BrickMMO');
+            $rootFolderId = '1351-DxRjX_siFqLzSiQGwT1SzwuXDwel';
 
             if ($rootFolderId !== null) {
                 listFilesInFolder($service, $rootFolderId);
